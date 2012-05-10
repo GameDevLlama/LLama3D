@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="LLama3D" >
+
+    <jar
+        id="files"
+        jarfile="build/LLama3D.jar" >
+
+        <fileset
+            dir="bin/classes"
+            excludes="com/llama3d/*.class"
+            includes="com/llama3d/**/**" />
+
+        <fileset
+            dir="assets"
+            includes="fonts/** intro/* shaders/* textures/* models/*" />
+        <!-- <zipfileset src="antexport/Llama3D.jar" includes="fonts/** intro/* shaders/* textures/* models/* **/*.java **/*.class"/> -->
+
+        <zipfileset
+            includes="**/*.java **/*.class"
+            src="include/jbullet.jar" />
+
+        <zipfileset
+            includes="**/*.java **/*.class"
+            src="include/vecmath.jar" />
+    </jar>
+
+</project>
