@@ -46,15 +46,15 @@ public class LL3D {
 				for (int u = 0; u < faces; u++) {
 					for (int i = 0; i < 3; i++) {
 						x = mainFileStream.readFloat();
-						y = mainFileStream.readFloat();
 						z = mainFileStream.readFloat();
-						// nx = mainFileStream.readFloat();
-						// ny = mainFileStream.readFloat();
-						// nz = mainFileStream.readFloat();
+						y = mainFileStream.readFloat();
+						nx = mainFileStream.readFloat();
+						nz = mainFileStream.readFloat();
+						ny = mainFileStream.readFloat();
 						v[i] = new Vertex(x, y, z, nx, ny, nz, 0, 0, 0, 0, 0);
 						LL3D.surface.vertices.add(v[i]);
 					}
-					LL3D.surface.addTriangle(v[0], v[1], v[2]);
+					LL3D.surface.addTriangle(v[0], v[2], v[1]);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

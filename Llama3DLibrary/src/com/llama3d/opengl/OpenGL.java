@@ -106,7 +106,7 @@ public class OpenGL {
 	}
 
 	public static void setViewPort() {
-		GLES20.glDisable(GLES20.GL_DITHER);
+		//GLES20.glDisable(GLES20.GL_DITHER);
 		GLES20.glViewport(0, 0, DisplayCache.w, DisplayCache.h);
 		// Log.i("OpenGL", "set viewport. [" + DisplayCache.w + "x" +
 		// DisplayCache.h + "]");

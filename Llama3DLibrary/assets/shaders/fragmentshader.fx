@@ -79,10 +79,13 @@ mediump float F;
 mediump vec3 N = normalize(VARYING_NORMAL);
 mediump vec3 V = normalize(VARYING_POSITION - camera);
 
-highp vec4 diff = vec4(0.0, 0.0, 0.0, 0.0);
-highp vec4 spec = vec4(0.0, 0.0, 0.0, 0.0);
+mediump vec4 diff = vec4(0.0, 0.0, 0.0, 0.0);
+mediump vec4 spec = vec4(0.0, 0.0, 0.0, 0.0);
 
 highp vec4 colortex;
+
+float fogDensity = 0.0;
+float newDepth;
 
 //void pointLights(in pointlight pl,in vec4 N,in vec3 V,inout vec4 diff,inout vec4 spec) {
 //	if(pl.active == true){
@@ -124,7 +127,6 @@ void main() {
 		R = reflect(dl[i].direction, N);
 		diff += mat.diff * dl[i].color * max(dot(dl[i].direction, N), 0.0);
 		spec += mat.spec * dl[i].specular * pow(max(dot(R, V), 0.0), mat.shine);
-
 	}
 	/*
 	 for(int i=0;i < MAX_POINT_LIGHTS;i++){
@@ -132,12 +134,11 @@ void main() {
 	 }
 	 */
 	//fog
-	float fogDensity = 0.0;
 	if (mat.fog == true && cameraFog == true) {
 		if (depth > fogFar) {
 			fogDensity = 1.0;
 		} else if (depth >= fogNear) {
-			float newDepth = depth - fogNear;
+			newDepth = depth - fogNear;
 			fogDensity = newDepth / (fogFar - fogNear);
 		} else if (depth < fogNear) {
 			fogDensity = 0.0;

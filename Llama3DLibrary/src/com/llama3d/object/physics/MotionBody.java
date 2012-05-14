@@ -24,14 +24,12 @@ public class MotionBody extends MotionState {
     // Override Methods
     // ===================================================================
 
-    @Override
     public Transform getWorldTransform(Transform transformation) {
         this.object.dynamicBody.setWorldTransform(transformation);
         transformation.getOpenGLMatrix(this.object.translationMatrix);
         return transformation;
     }
 
-    @Override
     public void setWorldTransform(Transform transformation) {
         transformation.getOpenGLMatrix(this.object.translationMatrix);
     }
