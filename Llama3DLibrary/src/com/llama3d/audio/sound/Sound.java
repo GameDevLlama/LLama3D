@@ -46,10 +46,13 @@ public class Sound {
 		curveMixFactor = (float) (Math.max(Math.min(curveMixFactor, 1.0), 0.0));
 		// ======== Init Calculationvalues ========
 		float t1 = 0, t2 = 0, t3 = 0;
+		float[] vt = new float[4], vr = new float[2];
 		float[] v = new float[2];
 		int[] ct = new int[] { curveType1, curveType2 };
 		// ======== Calculate Temporary Values ========
 		float[] inc = new float[] { (float) (Math.PI * 2.0) * (frequency1 / 44100.0f), (float) (Math.PI * 2.0) * (frequency2 / 44100.0f) };
+		vt[1] = (float) (Math.PI * 2.0);
+		vt[3] = (float) (Math.PI * 2.0);
 		// ======= Edit Samples ========
 		for (int i = 0; i < bufferLength; i++) {
 			// ======== Calculate Temporary Values ========
@@ -75,7 +78,12 @@ public class Sound {
 					}
 					break;
 				case Curve.RANDOM:
-					v[u] = random.nextFloat() * 2.0f - 1.0f;
+					if (i * inc[u] >= vt[u * 2 + 1]) {
+						inc[u * 2 + 1] += (float) (Math.PI * 2.0);
+						vr[u] = (float) (random.nextFloat() * 2.0 - 1.0);
+					}
+					v[u] = (float) ((vt[u * 2] - vr[u]) * 0.5);
+					vt[u * 2] = v[u];
 					break;
 				case Curve.LINEAR:
 					v[u] = 1.0f;
