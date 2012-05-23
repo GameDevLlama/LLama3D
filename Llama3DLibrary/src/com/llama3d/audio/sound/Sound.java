@@ -1,10 +1,13 @@
 package com.llama3d.audio.sound;
 
+import java.io.IOException;
 import java.util.Random;
 
+import android.content.res.AssetFileDescriptor;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.media.MediaPlayer;
 import android.media.audiofx.AudioEffect;
 
 public class Sound {
@@ -14,6 +17,7 @@ public class Sound {
 	// ===================================================================
 
 	private Random random = new Random(System.currentTimeMillis());
+	private static MediaPlayer player = new MediaPlayer();
 
 	// ===================================================================
 	// Fields
@@ -21,6 +25,7 @@ public class Sound {
 
 	protected AudioTrack track;
 	protected AudioEffect sfx;
+	protected AssetFileDescriptor soundDescription;
 	private short[] buffer = new short[1024 * 128];
 
 	// ===================================================================
@@ -28,10 +33,7 @@ public class Sound {
 	// ===================================================================
 
 	public Sound() {
-		// ======== Create New AudioTrack ========
-		int minSize = AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT) * 128;
-		this.track = new AudioTrack(AudioManager.STREAM_MUSIC, 44100, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_DEFAULT, minSize, AudioTrack.MODE_STATIC);
-		this.track.setLoopPoints(0, this.buffer.length / 2 - 1, -1);
+
 	}
 
 	// ===================================================================
@@ -39,6 +41,13 @@ public class Sound {
 	// ===================================================================
 
 	public void mix(int curveType1, int frequency1, int curveType2, int frequency2, int curveMixType, float curveMixFactor, float start, float end) {
+
+		if (this.track == null) {
+			// ======== Create New AudioTrack ========
+			int minSize = AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT) * 128;
+			this.track = new AudioTrack(AudioManager.STREAM_MUSIC, 44100, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_DEFAULT, minSize, AudioTrack.MODE_STATIC);
+			this.track.setLoopPoints(0, this.buffer.length / 2 - 1, -1);
+		}
 
 		// ======== Create Temporarybuffer ========
 		float[] tempBuffer = new float[this.buffer.length];
@@ -51,8 +60,8 @@ public class Sound {
 		int[] ct = new int[] { curveType1, curveType2 };
 		// ======== Calculate Temporary Values ========
 		float[] inc = new float[] { (float) (Math.PI * 2.0) * (frequency1 / 44100.0f), (float) (Math.PI * 2.0) * (frequency2 / 44100.0f) };
-		vt[1] = (float) (Math.PI * 2.0);
-		vt[3] = (float) (Math.PI * 2.0);
+		vt[1] = (float) Math.PI;
+		vt[3] = (float) Math.PI;
 		// ======= Edit Samples ========
 		for (int i = 0; i < bufferLength; i++) {
 			// ======== Calculate Temporary Values ========
@@ -78,15 +87,22 @@ public class Sound {
 					}
 					break;
 				case Curve.RANDOM:
-					if (i * inc[u] >= vt[u * 2 + 1]) {
-						inc[u * 2 + 1] += (float) (Math.PI * 2.0);
-						vr[u] = (float) (random.nextFloat() * 2.0 - 1.0);
+					if (i * inc[u] > vt[u * 2 + 1]) {
+						vt[u * 2 + 1] += (float) Math.PI;
+						vr[u] = (float) (random.nextFloat() * Math.signum(Math.sin(i * inc[u])));
 					}
-					v[u] = (float) ((vt[u * 2] - vr[u]) * 0.5);
+					v[u] = (float) (vt[u * 2] + (vr[u] - vt[u * 2]) * 0.5);
 					vt[u * 2] = v[u];
 					break;
-				case Curve.LINEAR:
+				case Curve.CONST:
 					v[u] = 1.0f;
+					break;
+				case Curve.LINEAR:
+					if (t1 >= start && t1 <= end) {
+						v[u] = (t1 - start) / (end - start);
+					} else {
+						v[u] = 0.0f;
+					}
 					break;
 				case Curve.HYPERBEL:
 					if (t1 >= start && t1 <= end) {
@@ -130,6 +146,16 @@ public class Sound {
 		// ======== If Sound Exists Then Play ========
 		if (this.track != null) {
 			this.track.play();
+		} else if (this.soundDescription != null) {
+			try {
+				Sound.player.stop();
+				Sound.player.reset();
+				Sound.player.setDataSource(this.soundDescription.getFileDescriptor(), this.soundDescription.getStartOffset(), this.soundDescription.getLength());
+				Sound.player.prepare();
+				Sound.player.start();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -137,6 +163,8 @@ public class Sound {
 		// ======== If Sound Exists Then Play ========
 		if (this.track != null) {
 			this.track.stop();
+		} else if (this.soundDescription != null) {
+			player.stop();
 		}
 	}
 

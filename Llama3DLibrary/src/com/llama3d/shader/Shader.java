@@ -170,6 +170,9 @@ public class Shader {
 		GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
 		if (compiled[0] == 0) {
 			Log.e("OpenGL Shader", "Error. [" + shaderPath + "] " + GLES20.glGetShaderInfoLog(shader));
+
+			Log.e("OpenGL Shader Code", shaderCode);
+
 			Log.e("OpenGL Shader", GLES20.glGetProgramInfoLog(shader));
 		}
 		return shader;
@@ -181,6 +184,40 @@ public class Shader {
 		rawShader = rawShader.replaceAll("LL.MAX_POINT_LIGHTS", "" + BaseActivity.MAX_POINT_LIGHTS);
 		rawShader = rawShader.replaceAll("LL.MAX_DIR_LIGHTS", "" + BaseActivity.MAX_DIR_LIGHTS);
 		rawShader = rawShader.replaceAll("LL.MAX_TEXTURES", "" + BaseActivity.MAX_TEXTURES);
+
+		rawShader = replaceInternFunctions(rawShader, "import", libraryIntern);
+
+		return rawShader;
+	}
+
+	private static String replaceInternFunctions(String rawShader, String functionName, boolean libraryIntern) {
+		// ======== Define Function Terms To Search For ========
+		String completeFunctionTerm = "LL." + functionName + "(";
+		final String endingTerm = ");";
+		final String newLineTerm = "\n";
+		// ======== Start Searching For Terms ========
+		int functionStart = rawShader.indexOf(completeFunctionTerm);
+		while (functionStart != -1) {
+			int ending = rawShader.indexOf(endingTerm, functionStart + 1);
+			int newLine = rawShader.indexOf(newLineTerm, functionStart + 1);
+			// ======== If Function Has A Legal Ending ========
+			if (ending != -1 && newLine != -1) {
+				// ======== Check If NewLine Is After Functionending ========
+				if (newLine > ending) {
+					// ======== Log Info About Imports ========
+					String importName = rawShader.substring(functionStart + completeFunctionTerm.length() + 1, ending - 1);
+					Log.i("Shader", "import shaderchunk ..." + importName);
+					// ======== Replace Part With Shaderchunk ========
+					rawShader = rawShader.substring(0, functionStart - 1) + AssetFactory.loadAssetAsString("shaders/" + importName, libraryIntern)
+							+ rawShader.substring(functionStart + completeFunctionTerm.length() + importName.length() + endingTerm.length() + 2);
+				}
+			} else {
+				// ======== Throw Exception ========
+				new Exception("Could not mange shaderimports!").printStackTrace();
+			}
+			// ======== Prepare Repeat Conditions ========
+			functionStart = rawShader.indexOf(completeFunctionTerm, functionStart + 1);
+		}
 		return rawShader;
 	}
 

@@ -85,7 +85,6 @@ mediump vec4 spec = vec4(0.0, 0.0, 0.0, 0.0);
 highp vec4 colortex;
 
 float fogDensity = 0.0;
-float newDepth;
 
 //void pointLights(in pointlight pl,in vec4 N,in vec3 V,inout vec4 diff,inout vec4 spec) {
 //	if(pl.active == true){
@@ -101,49 +100,11 @@ float newDepth;
 
 void main() {
 
-	// ===================================================================
-	// TextureColor
-	// ===================================================================
-	if (uTextureExists == true) {
-		colortex = texture2D(uTexture, VARYING_UV_TEXTURE);
-	} else {
-		colortex = vec4(1.0, 1.0, 1.0, 1.0);
-	}
-
-	float autofadeAlpha;
-	if (mat.autofade == true && mat.alpha > 0.0) {
-		if (depth > mat.aFar) {
-			autofadeAlpha = 0.0;
-		} else if (depth >= mat.aNear) {
-			autofadeAlpha = 1.0 - (depth - mat.aFar) / (mat.aFar - mat.aNear);
-		} else if (depth < mat.aNear) {
-			autofadeAlpha = 1.0;
-		}
-	} else {
-		autofadeAlpha = 1.0;
-	}
-
-	for (int i = 0; i < MAX_DIR_LIGHTS; i++) {
-		R = reflect(dl[i].direction, N);
-		diff += mat.diff * dl[i].color * max(dot(dl[i].direction, N), 0.0);
-		spec += mat.spec * dl[i].specular * pow(max(dot(R, V), 0.0), mat.shine);
-	}
-	/*
-	 for(int i=0;i < MAX_POINT_LIGHTS;i++){
-	 pointLights(pl[i],N,V,diff,spec);
-	 }
-	 */
-	//fog
-	if (mat.fog == true && cameraFog == true) {
-		if (depth > fogFar) {
-			fogDensity = 1.0;
-		} else if (depth >= fogNear) {
-			newDepth = depth - fogNear;
-			fogDensity = newDepth / (fogFar - fogNear);
-		} else if (depth < fogNear) {
-			fogDensity = 0.0;
-		}
-	}
+	LL.import("c_fragment_texture_p2.fx");
+	LL.import("c_fragment_autofade_p2.fx");
+	LL.import("c_fragment_specular_p2.fx");
+	LL.import("c_fragment_fog_p2.fx");
+	
 	//final fragmentcolor
 	gl_FragColor = autofadeAlpha * mix(colortex * (ambient + mat.diff * diff) + spec, UNIFORM_FOG_COLOR, fogDensity+mat.elum);
 
