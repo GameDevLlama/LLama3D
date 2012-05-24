@@ -104,8 +104,6 @@ void main() {
 	LL.import("c_fragment_autofade_p2.fx");
 	LL.import("c_fragment_specular_p2.fx");
 	LL.import("c_fragment_fog_p2.fx");
-	
-	//final fragmentcolor
-	gl_FragColor = autofadeAlpha * mix(colortex * (ambient + mat.diff * diff) + spec, UNIFORM_FOG_COLOR, fogDensity+mat.elum);
+	LL.import("c_fragment_final_p2.fx");
 
 }

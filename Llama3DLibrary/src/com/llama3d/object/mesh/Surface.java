@@ -91,19 +91,18 @@ public class Surface {
 	}
 
 	public void buffer() {
+		long timeStamp = System.nanoTime();
 		this.vertexBuffer = FloatBufferFactory.create(this.triangles.size() * 33);
 		for (Triangle triangle : this.triangles) {
-			for (int u = 0; u < 33; u++) {
+			for (int v = 0; v < 3; v++) {
 				// ======== Put Data ========
-				if (u < 11) {
-					this.vertexBuffer.put((float) triangle.vertex[0].data[u]);
-				} else if (u < 22) {
-					this.vertexBuffer.put((float) triangle.vertex[1].data[u - 11]);
-				} else {
-					this.vertexBuffer.put((float) triangle.vertex[2].data[u - 22]);
+				for (int d = 0; d < 11; d++) {
+					this.vertexBuffer.put((float) triangle.vertex[v].data[d]);
 				}
 			}
 		}
+		timeStamp = System.nanoTime() - timeStamp;
+		Log.i("Surface", "surface buffered in " + (timeStamp / 1000000l) + " ms.");
 	}
 
 	public void setBuffer() {
