@@ -1,0 +1,1 @@
+float fogDensity = 0.0;

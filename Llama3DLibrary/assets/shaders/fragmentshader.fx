@@ -38,10 +38,6 @@ uniform vec3 camera;
 
 LL.import("c_fragment_texture_p1.fx");
 
-// ===================================================================
-// Lights
-// ===================================================================
-
 uniform vec4 ambient;
 
 mediump vec3 R;
@@ -55,7 +51,7 @@ mediump vec4 spec = vec4(0.0, 0.0, 0.0, 0.0);
 
 highp vec4 colortex;
 
-float fogDensity = 0.0;
+LL.import("c_fragment_fog_p1.fx");
 
 //void pointLights(in pointlight pl,in vec4 N,in vec3 V,inout vec4 diff,inout vec4 spec) {
 //	if(pl.active == true){
