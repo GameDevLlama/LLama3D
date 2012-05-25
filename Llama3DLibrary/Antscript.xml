@@ -12,7 +12,7 @@
 
         <fileset
             dir="assets"
-            includes="fonts/** intro/* shaders/* textures/* models/*" />
+            includes="fonts/** intro/* shaders/** textures/* models/*" />
         <!-- <zipfileset src="antexport/Llama3D.jar" includes="fonts/** intro/* shaders/* textures/* models/* **/*.java **/*.class"/> -->
 
         <zipfileset

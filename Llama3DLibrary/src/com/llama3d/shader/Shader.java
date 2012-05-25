@@ -208,7 +208,7 @@ public class Shader {
 					String importName = rawShader.substring(functionStart + completeFunctionTerm.length() + 1, ending - 1);
 					Log.i("Shader", "import shaderchunk ..." + importName);
 					// ======== Replace Part With Shaderchunk ========
-					rawShader = rawShader.substring(0, functionStart - 1) + AssetFactory.loadAssetAsString("shaders/" + importName, libraryIntern)
+					rawShader = rawShader.substring(0, functionStart - 1) + AssetFactory.loadAssetAsString("shaders/chunks/" + importName, libraryIntern)
 							+ rawShader.substring(functionStart + completeFunctionTerm.length() + importName.length() + endingTerm.length() + 2);
 				}
 			} else {
