@@ -8,6 +8,7 @@ import com.llama3d.object.graphics.image.ImageCache;
 import com.llama3d.object.graphics.image.control.Native;
 import com.llama3d.object.graphics.texture.TextureCache;
 import com.llama3d.object.material.MaterialCache;
+import com.llama3d.object.mesh.MeshCache;
 import com.llama3d.shader.ShaderCache;
 
 public class OpenGL {
@@ -106,7 +107,7 @@ public class OpenGL {
 	}
 
 	public static void setViewPort() {
-		//GLES20.glDisable(GLES20.GL_DITHER);
+		// GLES20.glDisable(GLES20.GL_DITHER);
 		GLES20.glViewport(0, 0, DisplayCache.w, DisplayCache.h);
 		// Log.i("OpenGL", "set viewport. [" + DisplayCache.w + "x" +
 		// DisplayCache.h + "]");
@@ -140,7 +141,8 @@ public class OpenGL {
 
 	private static void reset() {
 		MaterialCache.currentMaterial = null;
-		ImageCache.lastUsedImageBuffer = 0;
+		ImageCache.reset();
+		MeshCache.reset();
 		TextureCache.lastTextureUnit = 0;
 	}
 

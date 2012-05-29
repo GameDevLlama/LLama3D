@@ -3,11 +3,13 @@ LL.import("c_fragment_const.fx");
 // ======== Float Precision ========
 LL.import("c_fragment_precision.fx");
 // ======== Varyings ========
-LL.import("c_fragment_varying.fx");
+LL.import("c_varying.fx");
 // ======== Uniforms ========
 LL.import("c_fragment_uniform.fx");
 // ======== Fog Effect ========
 LL.import("c_fragment_fog_p1.fx");
+// ======== Functions ========
+LL.import("c_fragment_dirlight_func.fx");
 
 void main() {
 

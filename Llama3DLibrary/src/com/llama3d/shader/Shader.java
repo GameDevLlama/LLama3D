@@ -181,12 +181,9 @@ public class Shader {
 
 	private String openGLloadSourceCode(String shaderPath, boolean libraryIntern) {
 		String rawShader = AssetFactory.loadAssetAsString(shaderPath, libraryIntern);
-		rawShader = rawShader.replaceAll("LL.MAX_POINT_LIGHTS", "" + BaseActivity.MAX_POINT_LIGHTS);
-		rawShader = rawShader.replaceAll("LL.MAX_DIR_LIGHTS", "" + BaseActivity.MAX_DIR_LIGHTS);
-		rawShader = rawShader.replaceAll("LL.MAX_TEXTURES", "" + BaseActivity.MAX_TEXTURES);
-
+		// ======== Manage Inplace-Imports And Variable Names ========
 		rawShader = replaceInternFunctions(rawShader, "import", libraryIntern);
-
+		// ======== Return Rawshader ========
 		return rawShader;
 	}
 
@@ -207,8 +204,11 @@ public class Shader {
 					// ======== Log Info About Imports ========
 					String importName = rawShader.substring(functionStart + completeFunctionTerm.length() + 1, ending - 1);
 					Log.i("Shader", "import shaderchunk ..." + importName);
+					// ======== Replace Recursive ========
+					String chunkCode = AssetFactory.loadAssetAsString("shaders/chunks/" + importName, libraryIntern);
+					chunkCode = replaceInternFunctions(chunkCode, "import", libraryIntern);
 					// ======== Replace Part With Shaderchunk ========
-					rawShader = rawShader.substring(0, functionStart - 1) + AssetFactory.loadAssetAsString("shaders/chunks/" + importName, libraryIntern)
+					rawShader = rawShader.substring(0, functionStart - 1) + "\n" + chunkCode
 							+ rawShader.substring(functionStart + completeFunctionTerm.length() + importName.length() + endingTerm.length() + 2);
 				}
 			} else {
@@ -218,6 +218,11 @@ public class Shader {
 			// ======== Prepare Repeat Conditions ========
 			functionStart = rawShader.indexOf(completeFunctionTerm, functionStart + 1);
 		}
+		// ======== Replace Variable Names ========
+		rawShader = rawShader.replaceAll("LL.MAX_POINT_LIGHTS", "" + BaseActivity.MAX_POINT_LIGHTS);
+		rawShader = rawShader.replaceAll("LL.MAX_DIR_LIGHTS", "" + BaseActivity.MAX_DIR_LIGHTS);
+		rawShader = rawShader.replaceAll("LL.MAX_TEXTURES", "" + BaseActivity.MAX_TEXTURES);
+		// ======== Return Rawshader ========
 		return rawShader;
 	}
 

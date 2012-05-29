@@ -115,11 +115,15 @@ public class Surface {
 
 	public void render() {
 		this.material.passUniforms();
-		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, this.buffer[0]);
-		GLES20.glVertexAttribPointer(ShaderCache.activeShader.attributeVertex, 3, GLES20.GL_FLOAT, false, 44, 0);
-		GLES20.glVertexAttribPointer(ShaderCache.activeShader.attributeNormal, 3, GLES20.GL_FLOAT, false, 44, 12);
-		GLES20.glVertexAttribPointer(ShaderCache.activeShader.attributeColor, 3, GLES20.GL_FLOAT, false, 44, 24);
-		GLES20.glVertexAttribPointer(ShaderCache.activeShader.attributeUV, 2, GLES20.GL_FLOAT, false, 44, 36);
+		if (this.buffer[0] != MeshCache.lastUsedVBO) {
+			GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, this.buffer[0]);
+			GLES20.glVertexAttribPointer(ShaderCache.activeShader.attributeVertex, 3, GLES20.GL_FLOAT, false, 44, 0);
+			GLES20.glVertexAttribPointer(ShaderCache.activeShader.attributeNormal, 3, GLES20.GL_FLOAT, true, 44, 12);
+			GLES20.glVertexAttribPointer(ShaderCache.activeShader.attributeColor, 3, GLES20.GL_FLOAT, true, 44, 24);
+			GLES20.glVertexAttribPointer(ShaderCache.activeShader.attributeUV, 2, GLES20.GL_FLOAT, false, 44, 36);
+			// ======== Change RenderStep Data ========
+			MeshCache.lastUsedVBO = this.buffer[0];
+		}
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, this.triangles.size() * 3);
 	}
 

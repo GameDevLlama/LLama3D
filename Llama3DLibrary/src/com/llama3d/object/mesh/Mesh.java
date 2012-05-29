@@ -33,6 +33,13 @@ public class Mesh extends Object3D {
 		}
 	}
 
+	public Mesh(Mesh mesh) {
+		this.geometry = mesh.geometry;
+		if (!this.geometry.buffered) {
+			this.bufferSurfaces();
+		}
+	}
+
 	// ===================================================================
 	// Methods
 	// ===================================================================
@@ -50,6 +57,10 @@ public class Mesh extends Object3D {
 		}
 	}
 
+	public Mesh copy() {
+		return new Mesh(this);
+	}
+
 	// ===================================================================
 	// Public Static Methods
 	// ===================================================================
@@ -63,7 +74,7 @@ public class Mesh extends Object3D {
 	public static Mesh loadWaveFront(String modelPath) {
 		return new Mesh(WaveFront.load(modelPath));
 	}
-	
+
 	public static Mesh loadLLamaModel(String modelPath) {
 		return new Mesh(LL3D.load(modelPath));
 	}
