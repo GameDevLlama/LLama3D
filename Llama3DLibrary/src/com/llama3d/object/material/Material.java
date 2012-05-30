@@ -67,6 +67,7 @@ public class Material {
 			layer = 7;
 		}
 		this.textures[layer] = texture;
+		this.changed = true;
 	}
 
 	public void setAlpha(float alpha) {

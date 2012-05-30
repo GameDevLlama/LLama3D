@@ -32,7 +32,7 @@ public class Camera extends Object3D {
 
 	private static final int defaultAngle = 45;
 	private static final float defaultRangeNear = 0.1f;
-	private static final float defaultRangeFar = 500f;
+	private static final float defaultRangeFar = 200f;
 
 	// ===================================================================
 	// Public Static Final Fields
@@ -133,7 +133,7 @@ public class Camera extends Object3D {
 	 * @param near
 	 *            - nearvalue (default = 0.1f).
 	 * @param far
-	 *            - farvalue (default = 500f).
+	 *            - farvalue (default = defaultRangeFar).
 	 */
 	public void range(float near, float far) {
 		this.near = near;
@@ -156,7 +156,7 @@ public class Camera extends Object3D {
 	 * Sets only far range of cameraprojection.
 	 * 
 	 * @param far
-	 *            - farvalue (default = 500f).
+	 *            - farvalue (default = defaultRangeFar).
 	 */
 	public void rangeFar(float far) {
 		this.far = far;

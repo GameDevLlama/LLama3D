@@ -5,8 +5,8 @@ for (int i = 0; i < MAX_DIR_LIGHTS; i++) {
 	diff += calcDirLight(dl[i], mat, N);
 	//diff += mat.diff * dl[i].color * max(dot(dl[i].direction, N), 0.0);
 	
-	//R = reflect(dl[i].direction, N);
-	//spec += mat.spec * dl[i].specular * pow(max(dot(R, V), 0.0), mat.shine);
+	R = reflect(dl[i].direction, N);
+	spec += mat.spec * dl[i].specular * pow(max(dot(R, V), 0.0), mat.shine);
 }
 
 //void pointLights(in pointlight pl,in vec4 N,in vec3 V,inout vec4 diff,inout vec4 spec) {

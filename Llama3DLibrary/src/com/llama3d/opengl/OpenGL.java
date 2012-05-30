@@ -7,6 +7,7 @@ import com.llama3d.main.graphics.blend.Blend;
 import com.llama3d.object.graphics.image.ImageCache;
 import com.llama3d.object.graphics.image.control.Native;
 import com.llama3d.object.graphics.texture.TextureCache;
+import com.llama3d.object.light.Ambient;
 import com.llama3d.object.material.MaterialCache;
 import com.llama3d.object.mesh.MeshCache;
 import com.llama3d.shader.ShaderCache;
@@ -143,6 +144,7 @@ public class OpenGL {
 		MaterialCache.currentMaterial = null;
 		ImageCache.reset();
 		MeshCache.reset();
+		Ambient.reset();
 		TextureCache.lastTextureUnit = 0;
 	}
 

@@ -47,6 +47,7 @@ public class ObjectTransformable extends ObjectPhysical {
 	public ObjectTransformable() {
 		Matrix.setIdentityM(this.translationMatrix, 0);
 		Matrix.setIdentityM(this.rotationMatrix, 0);
+		Matrix.setIdentityM(this.matrix, 0);
 		this.transform();
 	}
 
@@ -236,29 +237,15 @@ public class ObjectTransformable extends ObjectPhysical {
 	}
 
 	public void position(float posX, float posY, float posZ, boolean global) {
-		this.translationMatrix[12] = +posX;
-		this.translationMatrix[13] = +posY;
-		this.translationMatrix[14] = +posZ;
+		this.matrix[12] = +posX;
+		this.matrix[13] = +posY;
+		this.matrix[14] = +posZ;
 		this.transform();
 	}
 
 	public void rotate(float pitch, float yaw, float roll) {
-		// ======== X-Axis ========
-		this.translationMatrix[0] = this.scale[0];
-		this.translationMatrix[1] = 0;
-		this.translationMatrix[2] = 0;
-		// ======== Y-Axis ========
-		this.translationMatrix[4] = 0;
-		this.translationMatrix[5] = this.scale[1];
-		this.translationMatrix[6] = 0;
-		// ======== Z-Axis ========
-		this.translationMatrix[8] = 0;
-		this.translationMatrix[9] = 0;
-		this.translationMatrix[10] = this.scale[2];
 		// ======== Rotation ========
-		Matrix.rotateM(this.translationMatrix, 0, +pitch, 1f, 0, 0);
-		Matrix.rotateM(this.translationMatrix, 0, +yaw, 0, 1f, 0);
-		Matrix.rotateM(this.translationMatrix, 0, +roll, 0, 0, 1f);
+		Matrix.rotateM(this.matrix, 0, +1f, pitch, yaw, roll);
 		this.rotation[0] = pitch;
 		this.rotation[1] = yaw;
 		this.rotation[2] = roll;
@@ -283,9 +270,6 @@ public class ObjectTransformable extends ObjectPhysical {
 
 	protected void transform() {
 		// ======== Transform Parential ========
-		Matrix.setIdentityM(this.matrix, 0);
-		Matrix.multiplyMM(this.matrix, 0, this.rotationMatrix, 0, this.matrix, 0);
-		Matrix.multiplyMM(this.matrix, 0, this.translationMatrix, 0, this.matrix, 0);
 		if (this.parent != null) {
 			Matrix.multiplyMM(this.matrix, 0, this.parent.matrix, 0, this.matrix, 0);
 		}
