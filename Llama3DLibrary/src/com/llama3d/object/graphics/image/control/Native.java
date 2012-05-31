@@ -4,6 +4,7 @@ import android.opengl.GLES20;
 
 import com.llama3d.main.display.DisplayCache;
 import com.llama3d.main.graphics.blend.Blend;
+import com.llama3d.opengl.OpenGL;
 import com.llama3d.shader.ShaderCache;
 
 public class Native {
@@ -105,6 +106,12 @@ public class Native {
 	 * @param blue
 	 */
 	public static void clearScreen(int red, int green, int blue) {
+		if (OpenGL.autoDither) {
+			OpenGL.pushDither();
+			GLES20.glDisable(GLES20.GL_DITHER);
+			OpenGL.popDither();
+		}
+
 		GLES20.glViewport(0, 0, DisplayCache.w, DisplayCache.h);
 		GLES20.glClearColor((float) red / 255f, (float) green / 255f, (float) blue / 255f, 1);
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);

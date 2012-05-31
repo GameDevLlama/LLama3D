@@ -168,6 +168,12 @@ public class Camera extends Object3D {
 	 * {@link clsColor}.
 	 */
 	public void clearScreen() {
+		if (OpenGL.autoDither) {
+			OpenGL.pushDither();
+			GLES20.glDisable(GLES20.GL_DITHER);
+			OpenGL.popDither();
+		}
+
 		GLES20.glViewport(this.viewportX, this.viewportY, this.viewportWidth, this.viewportHeight);
 		GLES20.glClearColor(this._clsColor.r, this._clsColor.g, this._clsColor.b, 1.0f);
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);

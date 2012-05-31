@@ -23,11 +23,20 @@ public class OpenGL {
 	public static final int renderInterface = 0x00001103;
 
 	// ===================================================================
-	// Public Static Fields
+	// Private Static Fields
 	// ===================================================================
 
 	private static int temporaryRenderMode = 0;
 	private static int currentRenderMode = 0;
+	private static boolean temporaryDither = false;
+
+	private static boolean dither;
+
+	// ===================================================================
+	// Public Static Fields
+	// ===================================================================
+
+	public static boolean autoDither = true;
 
 	// ===================================================================
 	// Public Static Methods
@@ -105,6 +114,23 @@ public class OpenGL {
 
 	public static void pushRenderMode() {
 		OpenGL.temporaryRenderMode = OpenGL.currentRenderMode;
+	}
+
+	public static void dither(boolean enable) {
+		if (enable) {
+			GLES20.glEnable(GLES20.GL_DITHER);
+		} else {
+			GLES20.glDisable(GLES20.GL_DITHER);
+		}
+		OpenGL.dither = enable;
+	}
+
+	public static void popDither() {
+		OpenGL.dither(OpenGL.temporaryDither);
+	}
+
+	public static void pushDither() {
+		OpenGL.temporaryDither = OpenGL.dither;
 	}
 
 	public static void setViewPort() {

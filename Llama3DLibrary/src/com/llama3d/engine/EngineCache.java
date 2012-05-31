@@ -13,6 +13,7 @@ import com.llama3d.main.view.SurfaceViewCache;
 import com.llama3d.main.window.WindowCache;
 import com.llama3d.object.graphics.image.ImageVBOFactory;
 import com.llama3d.opengl.OpenGL;
+import com.llama3d.vibrator.Vibes;
 
 public class EngineCache {
 
@@ -40,6 +41,8 @@ public class EngineCache {
 		PointerElementCache.init();
 		// ======== Initialize AccelerationElement ========
 		AccelerationElementCache.init();
+		// ======== Initialize Vibration-Function ========
+		Vibes.init();
 		// ======== Initialize SurfaceView ========
 		SurfaceViewCache.init();
 		// ======== Initialize ContentView ========
