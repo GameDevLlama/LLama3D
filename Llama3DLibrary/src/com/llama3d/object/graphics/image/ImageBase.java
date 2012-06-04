@@ -124,10 +124,15 @@ public class ImageBase extends ObjectImage {
 
 	public void drawLine(int x1, int y1, int x2, int y2) {
 		// ======== LineWidth = ImageHeight ========
-		this.drawLine(x1, y1, x2, y2, this.height);
+		this.drawLine(x1, y1, x2, y2, this.height, 0);
 	}
 
-	public void drawLine(int x1, int y1, int x2, int y2, float lineWidth) {
+	public void drawLine(int x1, int y1, int x2, int y2, int mode) {
+		// ======== LineWidth = ImageHeight ========
+		this.drawLine(x1, y1, x2, y2, this.height, mode);
+	}
+
+	public void drawLine(int x1, int y1, int x2, int y2, float lineWidth, int mode) {
 		// ======== If There's A Line ========
 		if (x1 != x2 || y1 != y2) {
 			// ======== Resetting Bufferposition ========
@@ -135,15 +140,27 @@ public class ImageBase extends ObjectImage {
 			// ======== Calculate LineData ========
 			float length = (float) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 			float crossVectorX = ((float) (y1 - y2) / length);
-			float crossVectorY = ((float) (x2 - x1) / length);
+			float crossVectorY = ((float) (x1 - x2) / length);
 			lineWidth *= 0.5f;
+			float this_u2 = 0;
+			// ======== Check UV-Mapping Mode ========
+			switch (mode) {
+			// ======== UV-Coordinates Are Stretched ========
+			case Image.STRETCH:
+				this_u2 = this.u2;
+				break;
+			// ======== UV-Coordinates Are Repeated ========
+			case Image.REPEAT:
+				this_u2 = length / this.imagetexture.textureSize;
+				break;
+			}
 			// ======== Put Vertex In Buffer ========
 			ImageBaseCache.putVertex(x1 + crossVectorX * lineWidth, -y1 + crossVectorY * lineWidth, this.u1, this.v1);
 			ImageBaseCache.putVertex(x1 - crossVectorX * lineWidth, -y1 - crossVectorY * lineWidth, this.u1, this.v2);
-			ImageBaseCache.putVertex(x2 + crossVectorX * lineWidth, -y2 + crossVectorY * lineWidth, this.u2, this.v1);
-			ImageBaseCache.putVertex(x2 + crossVectorX * lineWidth, -y2 + crossVectorY * lineWidth, this.u2, this.v1);
+			ImageBaseCache.putVertex(x2 + crossVectorX * lineWidth, -y2 + crossVectorY * lineWidth, this_u2, this.v1);
+			ImageBaseCache.putVertex(x2 + crossVectorX * lineWidth, -y2 + crossVectorY * lineWidth, this_u2, this.v1);
 			ImageBaseCache.putVertex(x1 - crossVectorX * lineWidth, -y1 - crossVectorY * lineWidth, this.u1, this.v2);
-			ImageBaseCache.putVertex(x2 - crossVectorX * lineWidth, -y2 - crossVectorY * lineWidth, this.u2, this.v2);
+			ImageBaseCache.putVertex(x2 - crossVectorX * lineWidth, -y2 - crossVectorY * lineWidth, this_u2, this.v2);
 			// ======== Resetting Bufferposition ========
 			ImageBaseCache.resetBuffer();
 			// ======== Passing Vertex And UV Attributes ========

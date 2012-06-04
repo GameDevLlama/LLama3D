@@ -56,7 +56,7 @@ public class TextureUnit {
 			textureBitmap.setPixels(pixels, 0, this.imageWidth, 0, 0, this.imageWidth, this.imageHeight);
 		}
 		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, textureBitmap, 0);
-		
+
 		Log.i("TextureUnit", "texture loaded. [unit:" + this.unit + "]");
 
 		textureBitmap.recycle();
@@ -76,8 +76,13 @@ public class TextureUnit {
 			GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
 		}
 
-		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_TEXTURE_WRAP_S);
-		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_TEXTURE_WRAP_T);
+		// GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,
+		// GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_TEXTURE_WRAP_S);
+		// GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,
+		// GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_TEXTURE_WRAP_T);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
+
 		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_BINDING_2D, GLES20.GL_ACTIVE_TEXTURE);
 	}
 

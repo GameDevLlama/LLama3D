@@ -6,6 +6,13 @@ import com.llama3d.scene.SceneCache;
 public class Image extends ImageBase {
 
 	// ===================================================================
+	// Public Static Final Fields
+	// ===================================================================
+
+	public static final int STRETCH = 0x00000000;
+	public static final int REPEAT = 0x00000001;
+
+	// ===================================================================
 	// Private Static Fields
 	// ===================================================================
 

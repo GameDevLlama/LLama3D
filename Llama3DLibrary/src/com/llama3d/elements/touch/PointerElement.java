@@ -21,6 +21,8 @@ public class PointerElement implements OnTouchListener {
 	private boolean[] temporaryRelease = new boolean[5];
 
 	private float[][] temporaryPositions = new float[5][4];
+	private int temporaryPointerCount = 0;
+	private int pointerCount = 0;
 
 	// ===================================================================
 	// Public Methods
@@ -61,7 +63,8 @@ public class PointerElement implements OnTouchListener {
 			break;
 		}
 
-		for (int i = 0; i < mainMotionEvent.getPointerCount(); i++) {
+		this.pointerCount = mainMotionEvent.getPointerCount();
+		for (int i = 0; i < this.pointerCount; i++) {
 			// ======== New Pointer Coordinates ========
 			// this.temporaryPositions[i][0] = +(mainMotionEvent.getX(i) *
 			// mainMotionEvent.getXPrecision() - (float)
@@ -116,11 +119,13 @@ public class PointerElement implements OnTouchListener {
 			Pointer.xRelative[i] = Pointer.x[i] / (float) DisplayCache.w;
 			Pointer.yRelative[i] = Pointer.y[i] / (float) DisplayCache.h;
 			// ======== Speed Calculation ========
-			if (Pointer.hit[i]) {
+			if (Pointer.hit[i] || this.temporaryPointerCount != this.pointerCount) {
 				// ======== Old Position = New Position ========
 				this.temporaryPositions[i][2] = Pointer.x[i];
 				this.temporaryPositions[i][3] = Pointer.y[i];
 			}
+			this.temporaryPointerCount = this.pointerCount;
+
 			Pointer.speedX[i] = +(Pointer.x[i] - this.temporaryPositions[i][2]);
 			Pointer.speedY[i] = +(Pointer.y[i] - this.temporaryPositions[i][3]);
 			Pointer.speedXRelative[i] = Pointer.speedX[i] / (float) DisplayCache.w;
