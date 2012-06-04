@@ -5,6 +5,7 @@ import java.nio.FloatBuffer;
 import android.opengl.GLES20;
 
 import com.llama3d.main.buffer.FloatBufferFactory;
+import com.llama3d.main.display.DisplayCache;
 import com.llama3d.main.graphics.Origin;
 import com.llama3d.math.MathEx;
 import com.llama3d.math.color.iColorRGB;
@@ -133,44 +134,46 @@ public class ImageBase extends ObjectImage {
 	}
 
 	public void drawLine(int x1, int y1, int x2, int y2, float lineWidth, int mode) {
-		// ======== If There's A Line ========
-		if (x1 != x2 || y1 != y2) {
-			// ======== Resetting Bufferposition ========
-			ImageBaseCache.resetBuffer();
-			// ======== Calculate LineData ========
-			float length = (float) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-			float crossVectorX = ((float) (y1 - y2) / length);
-			float crossVectorY = ((float) (x1 - x2) / length);
-			lineWidth *= 0.5f;
-			float this_u2 = 0;
-			// ======== Check UV-Mapping Mode ========
-			switch (mode) {
-			// ======== UV-Coordinates Are Stretched ========
-			case Image.STRETCH:
-				this_u2 = this.u2;
-				break;
-			// ======== UV-Coordinates Are Repeated ========
-			case Image.REPEAT:
-				this_u2 = length / this.imagetexture.textureSize;
-				break;
+		//if (Math.abs(x1) < DisplayCache.w / 2 || Math.abs(x2) < DisplayCache.w / 2 || Math.abs(y1) < DisplayCache.h / 2 || Math.abs(y2) < DisplayCache.h / 2) {
+			// ======== If There's A Line ========
+			if (x1 != x2 || y1 != y2) {
+				// ======== Resetting Bufferposition ========
+				ImageBaseCache.resetBuffer();
+				// ======== Calculate LineData ========
+				float length = (float) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+				float crossVectorX = ((float) (y1 - y2) / length);
+				float crossVectorY = ((float) (x1 - x2) / length);
+				lineWidth *= 0.5f;
+				float this_u2 = 0;
+				// ======== Check UV-Mapping Mode ========
+				switch (mode) {
+				// ======== UV-Coordinates Are Stretched ========
+				case Image.STRETCH:
+					this_u2 = this.u2;
+					break;
+				// ======== UV-Coordinates Are Repeated ========
+				case Image.REPEAT:
+					this_u2 = length / this.imagetexture.textureSize;
+					break;
+				}
+				// ======== Put Vertex In Buffer ========
+				ImageBaseCache.putVertex(x1 + crossVectorX * lineWidth, -y1 + crossVectorY * lineWidth, this.u1, this.v1);
+				ImageBaseCache.putVertex(x1 - crossVectorX * lineWidth, -y1 - crossVectorY * lineWidth, this.u1, this.v2);
+				ImageBaseCache.putVertex(x2 + crossVectorX * lineWidth, -y2 + crossVectorY * lineWidth, this_u2, this.v1);
+				ImageBaseCache.putVertex(x2 + crossVectorX * lineWidth, -y2 + crossVectorY * lineWidth, this_u2, this.v1);
+				ImageBaseCache.putVertex(x1 - crossVectorX * lineWidth, -y1 - crossVectorY * lineWidth, this.u1, this.v2);
+				ImageBaseCache.putVertex(x2 - crossVectorX * lineWidth, -y2 - crossVectorY * lineWidth, this_u2, this.v2);
+				// ======== Resetting Bufferposition ========
+				ImageBaseCache.resetBuffer();
+				// ======== Passing Vertex And UV Attributes ========
+				GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+				GLES20.glVertexAttribPointer(ShaderCache.activeShader.attributeVertex, 2, GLES20.GL_FLOAT, false, 8, ImageBaseCache.vertices);
+				GLES20.glVertexAttribPointer(ShaderCache.activeShader.attributeUV, 2, GLES20.GL_FLOAT, false, 8, ImageBaseCache.uvs);
+				ImageCache.lastUsedImageBuffer = -1;
+				// ======== Render ImageLine ========
+				this.render(Origin.positionX, Origin.positionY, 0);
 			}
-			// ======== Put Vertex In Buffer ========
-			ImageBaseCache.putVertex(x1 + crossVectorX * lineWidth, -y1 + crossVectorY * lineWidth, this.u1, this.v1);
-			ImageBaseCache.putVertex(x1 - crossVectorX * lineWidth, -y1 - crossVectorY * lineWidth, this.u1, this.v2);
-			ImageBaseCache.putVertex(x2 + crossVectorX * lineWidth, -y2 + crossVectorY * lineWidth, this_u2, this.v1);
-			ImageBaseCache.putVertex(x2 + crossVectorX * lineWidth, -y2 + crossVectorY * lineWidth, this_u2, this.v1);
-			ImageBaseCache.putVertex(x1 - crossVectorX * lineWidth, -y1 - crossVectorY * lineWidth, this.u1, this.v2);
-			ImageBaseCache.putVertex(x2 - crossVectorX * lineWidth, -y2 - crossVectorY * lineWidth, this_u2, this.v2);
-			// ======== Resetting Bufferposition ========
-			ImageBaseCache.resetBuffer();
-			// ======== Passing Vertex And UV Attributes ========
-			GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
-			GLES20.glVertexAttribPointer(ShaderCache.activeShader.attributeVertex, 2, GLES20.GL_FLOAT, false, 8, ImageBaseCache.vertices);
-			GLES20.glVertexAttribPointer(ShaderCache.activeShader.attributeUV, 2, GLES20.GL_FLOAT, false, 8, ImageBaseCache.uvs);
-			ImageCache.lastUsedImageBuffer = -1;
-			// ======== Render ImageLine ========
-			this.render(Origin.positionX, Origin.positionY, 0);
-		}
+		//}
 	}
 
 	public void mask(int r, int g, int b) {
