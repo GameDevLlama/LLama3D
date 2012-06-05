@@ -9,6 +9,7 @@ import com.llama3d.main.display.DisplayCache;
 import com.llama3d.main.graphics.Origin;
 import com.llama3d.math.MathEx;
 import com.llama3d.math.color.iColorRGB;
+import com.llama3d.math.intersection.Intersection;
 import com.llama3d.object.ObjectImage;
 import com.llama3d.object.graphics.texture.TextureCache;
 import com.llama3d.shader.ShaderCache;
@@ -134,7 +135,7 @@ public class ImageBase extends ObjectImage {
 	}
 
 	public void drawLine(int x1, int y1, int x2, int y2, float lineWidth, int mode) {
-		//if (Math.abs(x1) < DisplayCache.w / 2 || Math.abs(x2) < DisplayCache.w / 2 || Math.abs(y1) < DisplayCache.h / 2 || Math.abs(y2) < DisplayCache.h / 2) {
+		if (!Intersection.lineToRect(x1, -y1, x2, -y2, -DisplayCache.w / 2, +DisplayCache.h / 2, +DisplayCache.w, -DisplayCache.h)) {
 			// ======== If There's A Line ========
 			if (x1 != x2 || y1 != y2) {
 				// ======== Resetting Bufferposition ========
@@ -173,7 +174,7 @@ public class ImageBase extends ObjectImage {
 				// ======== Render ImageLine ========
 				this.render(Origin.positionX, Origin.positionY, 0);
 			}
-		//}
+		}
 	}
 
 	public void mask(int r, int g, int b) {
