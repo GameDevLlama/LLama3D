@@ -34,7 +34,5 @@ public class Pointer {
 	// ======== Multiple Pointerevents ========
 	public static boolean[] hit = new boolean[5];
 	public static boolean[] down = new boolean[5];
-	public static boolean[] move = new boolean[5];
-	public static boolean[] release = new boolean[5];
 
 }

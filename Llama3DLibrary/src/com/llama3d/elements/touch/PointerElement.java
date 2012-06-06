@@ -1,5 +1,6 @@
 package com.llama3d.elements.touch;
 
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -16,12 +17,6 @@ public class PointerElement implements OnTouchListener {
 	private int mainPointerID;
 	private int mainPointerIndex;
 
-	private boolean[] temporaryDown = new boolean[5];
-	private boolean[] temporaryMove = new boolean[5];
-	private boolean[] temporaryRelease = new boolean[5];
-
-	private float[][] temporaryPositions = new float[5][4];
-	private int temporaryPointerCount = 0;
 	private int pointerCount = 0;
 
 	// ===================================================================
@@ -29,111 +24,70 @@ public class PointerElement implements OnTouchListener {
 	// ===================================================================
 
 	public void onTouchEvent(MotionEvent mainMotionEvent) {
+		// ======== Get New Stuff / Rest Old Stuff ========
+		Pointer.count = mainMotionEvent.getPointerCount();
 		// ======== Get MotionEvent Action ========
 		this.mainAction = mainMotionEvent.getAction() & MotionEvent.ACTION_MASK;
 		this.mainPointerIndex = (mainMotionEvent.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
 		this.mainPointerID = mainMotionEvent.getPointerId(this.mainPointerIndex);
+		// ======== Reset MotionEvents / Hit / Release ========
+		Pointer.hit[this.mainPointerID] = false;
 		// ======== Select MotionEvent Action ========
 		switch (this.mainAction) {
 		// ======== Any Down Event ========
 		case MotionEvent.ACTION_DOWN:
-			this.temporaryDown[this.mainPointerID] = true;
+			Pointer.hit[this.mainPointerID] = true;
+			Pointer.down[this.mainPointerID] = true;
+			Pointer.x[this.mainPointerID] = mainMotionEvent.getX(this.mainPointerIndex) - DisplayCache.w / 2;
+			Pointer.y[this.mainPointerID] = mainMotionEvent.getY(this.mainPointerIndex) - DisplayCache.h / 2;
 			break;
 		// ======== Any Down Event ========
 		case MotionEvent.ACTION_POINTER_DOWN:
-			this.temporaryDown[this.mainPointerID] = true;
+			Pointer.hit[this.mainPointerID] = true;
+			Pointer.down[this.mainPointerID] = true;
+			Pointer.x[this.mainPointerID] = mainMotionEvent.getX(this.mainPointerIndex) - DisplayCache.w / 2;
+			Pointer.y[this.mainPointerID] = mainMotionEvent.getY(this.mainPointerIndex) - DisplayCache.h / 2;
 			break;
 		// ======== Any Up Event ========
 		case MotionEvent.ACTION_UP:
-			this.temporaryRelease[this.mainPointerID] = true;
+			Pointer.down[this.mainPointerID] = false;
+			Pointer.speedX[this.mainPointerID] = 0;
+			Pointer.speedY[this.mainPointerID] = 0;
 			break;
 		// ======== Any Up Event ========
 		case MotionEvent.ACTION_POINTER_UP:
-			this.temporaryRelease[this.mainPointerID] = true;
+			Pointer.down[this.mainPointerID] = false;
+			Pointer.speedX[this.mainPointerID] = 0;
+			Pointer.speedY[this.mainPointerID] = 0;
 			break;
 		// ======== Any Move Event ========
 		case MotionEvent.ACTION_MOVE:
-			this.temporaryMove[this.mainPointerID] = true;
+			Pointer.x[this.mainPointerID] = mainMotionEvent.getX(this.mainPointerIndex) - DisplayCache.w / 2;
+			Pointer.y[this.mainPointerID] = mainMotionEvent.getY(this.mainPointerIndex) - DisplayCache.h / 2;
+			if (mainMotionEvent.getHistorySize() > 1) {
+				Pointer.speedX[this.mainPointerID] = mainMotionEvent.getHistoricalX(this.mainPointerIndex, mainMotionEvent.getHistorySize() - 1)
+						- mainMotionEvent.getHistoricalX(this.mainPointerIndex, mainMotionEvent.getHistorySize() - 2);
+				Pointer.speedY[this.mainPointerID] = mainMotionEvent.getHistoricalY(this.mainPointerIndex, mainMotionEvent.getHistorySize() - 1)
+						- mainMotionEvent.getHistoricalY(this.mainPointerIndex, mainMotionEvent.getHistorySize() - 2);
+			}
 			break;
-		// ======== Canceled Motion Event ========
-		case MotionEvent.ACTION_CANCEL:
-			this.temporaryDown[this.mainPointerID] = false;
-			this.temporaryMove[this.mainPointerID] = false;
-			this.temporaryRelease[this.mainPointerID] = false;
-			break;
 		}
 
-		this.pointerCount = mainMotionEvent.getPointerCount();
-		for (int i = 0; i < this.pointerCount; i++) {
-			// ======== New Pointer Coordinates ========
-			// this.temporaryPositions[i][0] = +(mainMotionEvent.getX(i) *
-			// mainMotionEvent.getXPrecision() - (float)
-			// BaseActivity.mainSurface.mainViewer.width / 2.0f);
-			// this.temporaryPositions[i][1] = +(mainMotionEvent.getY(i) *
-			// mainMotionEvent.getYPrecision() - (float)
-			// BaseActivity.mainSurface.mainViewer.height / 2.0f);
-
-			this.temporaryPositions[i][0] = +(mainMotionEvent.getX(i) - (float) DisplayCache.w / 2.0f);
-			this.temporaryPositions[i][1] = +(mainMotionEvent.getY(i) - (float) DisplayCache.h / 2.0f);
-
-		}
-		this.getPointerEvents();
-	}
-
-	public void getPointerEvents() {
-		// ======== Get New Stuff / Rest Old Stuff ========
-		Pointer.count = 0;
-		for (int i = 0; i < 5; i++) {
-			// ======== Reset MotionEvents / Hit / Release ========
-			Pointer.hit[i] = false;
-			Pointer.move[i] = false;
-			Pointer.release[i] = false;
-			// ======== Hit & Down ========
-			if (Pointer.down[i] == false && this.temporaryDown[i] == true) {
-				Pointer.hit[i] = true;
-				Pointer.down[i] = true;
-			}
-			// ======== Down & Release ========
-			if (Pointer.down[i] == true && this.temporaryRelease[i] == true) {
-				Pointer.down[i] = false;
-				Pointer.release[i] = true;
-			}
-			// ======== Down & Move ========
-			if (Pointer.down[i] == true && this.temporaryMove[i] == true) {
-				Pointer.move[i] = true;
-			}
-			// ======== Pointercount ========
-			if (Pointer.down[i]) {
-				Pointer.count++;
-			}
-			// ======== Reset Temporary Data ========
-			this.temporaryDown[i] = false;
-			this.temporaryMove[i] = false;
-			this.temporaryRelease[i] = false;
-			// ======== Save Old Position ========
-			this.temporaryPositions[i][2] = Pointer.x[i];
-			this.temporaryPositions[i][3] = Pointer.y[i];
-			// ======== New Position ========
-			Pointer.x[i] = this.temporaryPositions[i][0];
-			Pointer.y[i] = this.temporaryPositions[i][1];
-			Pointer.xRelative[i] = Pointer.x[i] / (float) DisplayCache.w;
-			Pointer.yRelative[i] = Pointer.y[i] / (float) DisplayCache.h;
-			// ======== Speed Calculation ========
-			if (Pointer.hit[i] || this.temporaryPointerCount != this.pointerCount) {
-				// ======== Old Position = New Position ========
-				this.temporaryPositions[i][2] = Pointer.x[i];
-				this.temporaryPositions[i][3] = Pointer.y[i];
-			}
-			this.temporaryPointerCount = this.pointerCount;
-
-			Pointer.speedX[i] = +(Pointer.x[i] - this.temporaryPositions[i][2]);
-			Pointer.speedY[i] = +(Pointer.y[i] - this.temporaryPositions[i][3]);
-			Pointer.speedXRelative[i] = Pointer.speedX[i] / (float) DisplayCache.w;
-			Pointer.speedYRelative[i] = Pointer.speedY[i] / (float) DisplayCache.h;
-		}
-		// ======== Get Other Stuff ========
-		this.getPinch();
-		this.getAngle();
+		// final int historySize = mainMotionEvent.getHistorySize();
+		// final int pointerCount = mainMotionEvent.getPointerCount();
+		// for (int h = 0; h < historySize; h++) {
+		// Log.i("At time", "" + mainMotionEvent.getHistoricalEventTime(h));
+		// for (int p = 0; p < pointerCount; p++) {
+		// System.out.printf("pointer %d: (%f,%f)",
+		// mainMotionEvent.getPointerId(p), mainMotionEvent.getHistoricalX(p,
+		// h), mainMotionEvent.getHistoricalY(p, h));
+		// }
+		// }
+		// Log.i("At time", "" + mainMotionEvent.getEventTime());
+		// for (int p = 0; p < pointerCount; p++) {
+		// Log.i("Pointer", "pointer " + mainMotionEvent.getPointerId(p) + ": ("
+		// + mainMotionEvent.getX(p) + "," + mainMotionEvent.getY(p) + ")");
+		// }
 	}
 
 	// ===================================================================

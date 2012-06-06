@@ -1,7 +1,6 @@
 package com.llama3d.engine;
 
 import com.llama3d.elements.sensor.AccelerationElementCache;
-import com.llama3d.elements.touch.PointerElementCache;
 import com.llama3d.main.activity.BaseActivityCache;
 import com.llama3d.main.view.SurfaceViewCache;
 import com.llama3d.scene.SceneCache;
@@ -49,7 +48,6 @@ public class Engine extends Thread {
 
 			// =================================
 			// ======== Update Elements ========
-			PointerElementCache.mainTouchElement.getPointerEvents();
 			AccelerationElementCache.element.getSensorEvents();
 			// ======== End Update Elements ========
 			// =====================================

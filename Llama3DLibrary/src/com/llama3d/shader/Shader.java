@@ -174,6 +174,9 @@ public class Shader {
 			Log.e("OpenGL Shader Code", shaderCode);
 
 			Log.e("OpenGL Shader", GLES20.glGetProgramInfoLog(shader));
+		} else {
+			Log.d("OpenGL Shader", GLES20.glGetShaderInfoLog(shader));
+			Log.d("OpenGL Shader", GLES20.glGetProgramInfoLog(shader));
 		}
 		return shader;
 
