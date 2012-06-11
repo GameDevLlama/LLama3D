@@ -10,7 +10,7 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
-import com.llama3d.elements.touch.PointerElementCache;
+import com.llama3d.elements.touch.TouchManager;
 import com.llama3d.object.graphics.image.Image;
 import com.llama3d.object.graphics.image.ImageTexture;
 import com.llama3d.object.graphics.texture.Texture;
@@ -91,7 +91,7 @@ public class SurfaceView extends GLSurfaceView implements OnTouchListener, Surfa
 
 	// ======== OnTouchEvent ========
 	public boolean onTouch(View arg0, MotionEvent mainMotionEvent) {
-		PointerElementCache.mainTouchElement.onTouchEvent(mainMotionEvent);
+		TouchManager.mainTouchElement.onTouchEvent(mainMotionEvent);
 		return true;
 	}
 

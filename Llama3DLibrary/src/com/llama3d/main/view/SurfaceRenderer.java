@@ -7,6 +7,7 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import com.llama3d.engine.Engine;
 import com.llama3d.engine.EngineCache;
 import com.llama3d.main.activity.BaseActivityCache;
 import com.llama3d.main.display.DisplayCache;
@@ -86,6 +87,15 @@ public class SurfaceRenderer implements Renderer {
 		case 1:
 			if (BaseActivityCache.mainActivity != null) {
 				BaseActivityCache.mainActivity.onGameFrame();
+			}
+			//framebased!!
+			// ======== Update All Active Gameloops ========
+			switch (EngineCache.engineActivityStatus) {
+			// ======== Activity Update ========
+			case 1:
+				SceneCache.update();
+				BaseActivityCache.mainActivity.onGameUpdate();
+				break;
 			}
 			break;
 		}

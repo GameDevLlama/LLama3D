@@ -3,7 +3,7 @@ package com.llama3d.engine;
 import android.util.Log;
 
 import com.llama3d.elements.sensor.AccelerationElementCache;
-import com.llama3d.elements.touch.PointerElementCache;
+import com.llama3d.elements.touch.TouchManager;
 import com.llama3d.main.activity.BaseActivityCache;
 import com.llama3d.main.activity.BaseActivityContent;
 import com.llama3d.main.assets.AssetCache;
@@ -38,7 +38,7 @@ public class EngineCache {
 		// ======== Initialize Display & Metrics ========
 		DisplayCache.init();
 		// ======== Initialize TouchElement ========
-		PointerElementCache.init();
+		TouchManager.init();
 		// ======== Initialize AccelerationElement ========
 		AccelerationElementCache.init();
 		// ======== Initialize Vibration-Function ========
@@ -64,8 +64,6 @@ public class EngineCache {
 	public static void onPause() {
 		// ======== Pause Surfaceview ========
 		SurfaceViewCache.surfaceView.onPause();
-		// ======== Pause Touch ========
-		PointerElementCache.onPause();
 		// ======== Clear All GL-Buffers And Temp Values ========
 		EngineCache.engineActivityStatus = 0;
 		ImageVBOFactory.clearVBOSpace();

@@ -11,10 +11,10 @@ public class Engine extends Thread {
 	// Public Static Methods
 	// ===================================================================
 
-	private int frameSkip = 2;
+	private int frameSkip = 4;
 	private int frameMax = 60;
-	private int frameTimeN;
-	private long frameSleep = 100l;
+	private long frameSleep = 200l;
+	private int frameTimeN = 1000000000 / this.frameMax;
 
 	// ===================================================================
 	// Thread Program
@@ -33,7 +33,6 @@ public class Engine extends Thread {
 			}
 		}
 		// ======== Timestamps ========
-		this.frameTimeN = 1000000000 / this.frameMax;
 		long[] timeStamp = new long[] { 0, 0, 0 };
 		int frameSkipped;
 		// ======== Main Thread Loop ========
@@ -42,7 +41,7 @@ public class Engine extends Thread {
 			frameSkipped = 0;
 			// =================================
 			// ======== Update Gameloop ========
-			Engine.updateGame();
+			//frame independent Engine.updateGame();
 			// ======== End Update Gameloop ========
 			// =====================================
 
@@ -71,7 +70,7 @@ public class Engine extends Thread {
 			while (timeStamp[2] < 0 && frameSkipped < this.frameSkip) {
 				// =================================
 				// ======== Update Gameloop ========
-				Engine.updateGame();
+				//frame independent Engine.updateGame();
 				// ======== End Update Gameloop ========
 				// =====================================
 

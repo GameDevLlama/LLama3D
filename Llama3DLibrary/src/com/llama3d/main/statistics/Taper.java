@@ -24,7 +24,7 @@ public class Taper {
 	// ===================================================================
 
 	public static void start(int index, boolean log) {
-		
+
 		// ======== After 1 minute ========
 		if (System.nanoTime() > timeStamp1[index]) {
 			timeStamp1[index] = System.nanoTime() + 60000000000l;
@@ -35,10 +35,10 @@ public class Taper {
 				tapes[index] = 0;
 				// ======== Log Value ========
 				if (log) {
-					Log.i("TimeStamp", "average time. [" + times[index] + " ns]");
+					Log.i("TimeStamp", "taper " + index + "recorded certain processing durations in average time. [" + times[index] + " ns]");
 				}
 			}
-			
+
 		}
 		// ======== Start Taping ========
 		timeStamp2[index] = System.nanoTime();

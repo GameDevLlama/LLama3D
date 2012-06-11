@@ -1,6 +1,5 @@
 package com.llama3d.analog;
 
-import com.llama3d.elements.touch.Pointer;
 import com.llama3d.opengl.OpenGL;
 import com.llama3d.scene.SceneCache;
 
@@ -80,34 +79,34 @@ public class AnalogController {
 
 	public void update() {
 
-		if (this.mainPointerRegistered) {
-			// ======== Pointer Registered On Stick ========
-			if (Pointer.down[this.mainPointer]) {
-				AnalogController.pointerDistance = (float) Math.sqrt(Math.pow(+Pointer.x[this.mainPointer] - mainOnScreenX, 2) + Math.pow(-Pointer.y[this.mainPointer] - mainOnScreenY, 2));
-				if (AnalogController.pointerDistance < 150f) {
-					this.x = +(+Pointer.x[this.mainPointer] - mainOnScreenX) / 150f;
-					this.y = -(-Pointer.y[this.mainPointer] - mainOnScreenY) / 150f;
-					this.axisX = +this.y;
-					this.axisY = +this.x;
-				} else {
-					this.unregisterPointer();
-				}
-			} else {
-				this.unregisterPointer();
-			}
-		} else {
-			// ======== No Pointer Registered On Stick ========
-			if (Pointer.count > 0) {
-				for (int i = 0; i < 5; i++) {
-					if (Pointer.hit[i]) {
-						AnalogController.pointerDistance = (float) Math.sqrt(Math.pow(Pointer.x[i] - mainOnScreenX, 2) + Math.pow(-Pointer.y[i] - mainOnScreenY, 2));
-						if (AnalogController.pointerDistance < 60f) {
-							this.registerPointer(i);
-						}
-					}
-				}
-			}
-		}
+//		if (this.mainPointerRegistered) {
+//			// ======== Pointer Registered On Stick ========
+//			if (Pointer.down[this.mainPointer]) {
+//				AnalogController.pointerDistance = (float) Math.sqrt(Math.pow(+Pointer.x[this.mainPointer] - mainOnScreenX, 2) + Math.pow(-Pointer.y[this.mainPointer] - mainOnScreenY, 2));
+//				if (AnalogController.pointerDistance < 150f) {
+//					this.x = +(+Pointer.x[this.mainPointer] - mainOnScreenX) / 150f;
+//					this.y = -(-Pointer.y[this.mainPointer] - mainOnScreenY) / 150f;
+//					this.axisX = +this.y;
+//					this.axisY = +this.x;
+//				} else {
+//					this.unregisterPointer();
+//				}
+//			} else {
+//				this.unregisterPointer();
+//			}
+//		} else {
+//			// ======== No Pointer Registered On Stick ========
+//			if (Pointer.count > 0) {
+//				for (int i = 0; i < 5; i++) {
+//					if (Pointer.down[i]) {
+//						AnalogController.pointerDistance = (float) Math.sqrt(Math.pow(Pointer.x[i] - mainOnScreenX, 2) + Math.pow(-Pointer.y[i] - mainOnScreenY, 2));
+//						if (AnalogController.pointerDistance < 60f) {
+//							this.registerPointer(i);
+//						}
+//					}
+//				}
+//			}
+//		}
 
 	}
 

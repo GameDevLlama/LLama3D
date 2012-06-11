@@ -48,7 +48,7 @@ public class Surface {
 	}
 
 	/**
-	 * Adds triangle to given surface. ( Remember CC or CCW addition for visible
+	 * Adds triangle to given surface. ( Remember CW or CCW addition for visible
 	 * or invisible tris.)
 	 * 
 	 * @param vertex1
@@ -63,7 +63,7 @@ public class Surface {
 	}
 
 	/**
-	 * Adds quad to given surface. ( Remember CC or CCW addition for visible or
+	 * Adds quad to given surface. ( Remember CW or CCW addition for visible or
 	 * invisible quads.)
 	 * 
 	 * @param vertex1
