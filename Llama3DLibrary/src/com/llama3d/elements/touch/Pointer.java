@@ -6,7 +6,7 @@ import android.view.View.OnTouchListener;
 
 import com.llama3d.main.display.DisplayCache;
 
-public class Touch implements OnTouchListener {
+public class Pointer implements OnTouchListener {
 
 	// ===================================================================
 	// Private Static Fields
@@ -34,6 +34,10 @@ public class Touch implements OnTouchListener {
 	// Public Methods
 	// ===================================================================
 
+	public static void update() {
+		
+	}
+
 	public void onTouchEvent(MotionEvent mainMotionEvent) {
 		// // ======== Get New Stuff / Rest Old Stuff ========
 		// // ======== Get MotionEvent Action ========
@@ -49,12 +53,12 @@ public class Touch implements OnTouchListener {
 			xTemp[pid] = mainMotionEvent.getX(pix);
 			yTemp[pid] = mainMotionEvent.getY(pix);
 
-			Touch.id = pid;
-			Touch.x[pid] = (int) (mainMotionEvent.getX(pix) - DisplayCache.w / 2);
-			Touch.y[pid] = (int) (mainMotionEvent.getX(pix) - DisplayCache.h / 2);
-			Touch.down[pid] = true;
+			Pointer.id = pid;
+			Pointer.x[pid] = (int) (mainMotionEvent.getX(pix) - DisplayCache.w / 2);
+			Pointer.y[pid] = (int) (mainMotionEvent.getX(pix) - DisplayCache.h / 2);
+			Pointer.down[pid] = true;
 
-			for (TouchListener handler : TouchManager.touchListeners) {
+			for (PointerListener handler : PointerManager.touchListeners) {
 				handler.pointerDown();
 			}
 			break;
@@ -62,15 +66,15 @@ public class Touch implements OnTouchListener {
 		case MotionEvent.ACTION_UP:
 			// ======== Any Up Event ========
 		case MotionEvent.ACTION_POINTER_UP:
-			Touch.down[pid] = false;
+			Pointer.down[pid] = false;
 			break;
 		// ======== Any Move Event ========
 		case MotionEvent.ACTION_MOVE:
-			Touch.x[pid] = (int) (mainMotionEvent.getX(pix) - DisplayCache.w / 2);
-			Touch.y[pid] = (int) (mainMotionEvent.getX(pix) - DisplayCache.h / 2);
-			Touch.speedX[pid] = (int) (mainMotionEvent.getX(pix) - xTemp[pid]);
-			Touch.speedY[pid] = (int) (mainMotionEvent.getY(pix) - yTemp[pid]);
-			for (TouchListener handler : TouchManager.touchListeners) {
+			Pointer.x[pid] = (int) (mainMotionEvent.getX(pix) - DisplayCache.w / 2);
+			Pointer.y[pid] = (int) (mainMotionEvent.getX(pix) - DisplayCache.h / 2);
+			Pointer.speedX[pid] = (int) (mainMotionEvent.getX(pix) - xTemp[pid]);
+			Pointer.speedY[pid] = (int) (mainMotionEvent.getY(pix) - yTemp[pid]);
+			for (PointerListener handler : PointerManager.touchListeners) {
 				handler.pointerMove();
 			}
 			xTemp[pid] = mainMotionEvent.getX(pix);

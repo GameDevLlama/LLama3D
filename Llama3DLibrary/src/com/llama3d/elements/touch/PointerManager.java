@@ -3,14 +3,14 @@ package com.llama3d.elements.touch;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TouchManager {
+public class PointerManager {
 
 	// ===================================================================
 	// Public Static Fields
 	// ===================================================================
 
-	public static Touch mainTouchElement;
-	protected static List<TouchListener> touchListeners = new ArrayList<TouchListener>();
+	public static Pointer mainTouchElement;
+	protected static List<PointerListener> touchListeners = new ArrayList<PointerListener>();
 
 	// ===================================================================
 	// Public Static Methods
@@ -18,7 +18,7 @@ public class TouchManager {
 
 	public static void init() {
 		// ======== Create New TouchElement ========
-		TouchManager.mainTouchElement = new Touch();
+		PointerManager.mainTouchElement = new Pointer();
 	}
 
 	/**
@@ -26,10 +26,10 @@ public class TouchManager {
 	 * @param handler
 	 */
 	
-	public static void addTouchListener(TouchListener handler) {
+	public static void addTouchListener(PointerListener handler) {
 		// ======== Registers Handler To Known Handlers ========
-		if (!TouchManager.touchListeners.contains(handler)) {
-			TouchManager.touchListeners.add(handler);
+		if (!PointerManager.touchListeners.contains(handler)) {
+			PointerManager.touchListeners.add(handler);
 		}
 	}
 
@@ -38,13 +38,13 @@ public class TouchManager {
 	 * @param handler
 	 */
 	
-	public static void removeTouchListener(TouchListener handler) {
+	public static void removeTouchListener(PointerListener handler) {
 		// ======== Remove Handler If It's In The List ========
-		TouchManager.touchListeners.remove(handler);
+		PointerManager.touchListeners.remove(handler);
 	}
 
-	public static boolean isTouchListener(TouchListener handler) {
-		if (TouchManager.touchListeners.contains(handler)) {
+	public static boolean isTouchListener(PointerListener handler) {
+		if (PointerManager.touchListeners.contains(handler)) {
 			return true;
 		}
 		return false;

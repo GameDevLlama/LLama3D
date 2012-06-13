@@ -1,6 +1,7 @@
 package com.llama3d.engine;
 
 import com.llama3d.elements.sensor.AccelerationElementCache;
+import com.llama3d.elements.touch.Pointer;
 import com.llama3d.main.activity.BaseActivityCache;
 import com.llama3d.main.view.SurfaceViewCache;
 import com.llama3d.scene.SceneCache;
@@ -41,7 +42,8 @@ public class Engine extends Thread {
 			frameSkipped = 0;
 			// =================================
 			// ======== Update Gameloop ========
-			//frame independent Engine.updateGame();
+			// frame independent Engine.updateGame();
+			Pointer.update();
 			// ======== End Update Gameloop ========
 			// =====================================
 
@@ -70,7 +72,8 @@ public class Engine extends Thread {
 			while (timeStamp[2] < 0 && frameSkipped < this.frameSkip) {
 				// =================================
 				// ======== Update Gameloop ========
-				//frame independent Engine.updateGame();
+				// frame independent Engine.updateGame();
+				Pointer.update();
 				// ======== End Update Gameloop ========
 				// =====================================
 

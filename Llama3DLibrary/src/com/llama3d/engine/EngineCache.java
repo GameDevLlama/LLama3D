@@ -3,7 +3,7 @@ package com.llama3d.engine;
 import android.util.Log;
 
 import com.llama3d.elements.sensor.AccelerationElementCache;
-import com.llama3d.elements.touch.TouchManager;
+import com.llama3d.elements.touch.PointerManager;
 import com.llama3d.main.activity.BaseActivityCache;
 import com.llama3d.main.activity.BaseActivityContent;
 import com.llama3d.main.assets.AssetCache;
@@ -38,7 +38,7 @@ public class EngineCache {
 		// ======== Initialize Display & Metrics ========
 		DisplayCache.init();
 		// ======== Initialize TouchElement ========
-		TouchManager.init();
+		PointerManager.init();
 		// ======== Initialize AccelerationElement ========
 		AccelerationElementCache.init();
 		// ======== Initialize Vibration-Function ========

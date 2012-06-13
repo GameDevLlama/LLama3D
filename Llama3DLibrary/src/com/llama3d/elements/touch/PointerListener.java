@@ -1,6 +1,6 @@
 package com.llama3d.elements.touch;
 
-public interface TouchListener {
+public interface PointerListener {
 
 	public void pointerDown();
 
