@@ -35,7 +35,7 @@ public class Pointer implements OnTouchListener {
 	// ===================================================================
 
 	public static void update() {
-		
+
 	}
 
 	public void onTouchEvent(MotionEvent mainMotionEvent) {
@@ -55,7 +55,7 @@ public class Pointer implements OnTouchListener {
 
 			Pointer.id = pid;
 			Pointer.x[pid] = (int) (mainMotionEvent.getX(pix) - DisplayCache.w / 2);
-			Pointer.y[pid] = (int) (mainMotionEvent.getX(pix) - DisplayCache.h / 2);
+			Pointer.y[pid] = (int) (mainMotionEvent.getY(pix) - DisplayCache.h / 2);
 			Pointer.down[pid] = true;
 
 			for (PointerListener handler : PointerManager.touchListeners) {
@@ -71,7 +71,7 @@ public class Pointer implements OnTouchListener {
 		// ======== Any Move Event ========
 		case MotionEvent.ACTION_MOVE:
 			Pointer.x[pid] = (int) (mainMotionEvent.getX(pix) - DisplayCache.w / 2);
-			Pointer.y[pid] = (int) (mainMotionEvent.getX(pix) - DisplayCache.h / 2);
+			Pointer.y[pid] = (int) (mainMotionEvent.getY(pix) - DisplayCache.h / 2);
 			Pointer.speedX[pid] = (int) (mainMotionEvent.getX(pix) - xTemp[pid]);
 			Pointer.speedY[pid] = (int) (mainMotionEvent.getY(pix) - yTemp[pid]);
 			for (PointerListener handler : PointerManager.touchListeners) {
