@@ -2,10 +2,10 @@ package com.llama3d.elements.touch;
 
 public interface TouchListener {
 
-	public void pointerDown(int pointerID, double pointerX, double pointerY);
+	public void pointerDown();
 
-	public void pointerMove(int pointerID, double speedX, double speedY);
+	public void pointerMove();
 
-	public void pointerRelease(int pointerID);
+	public void pointerRelease();
 
 }

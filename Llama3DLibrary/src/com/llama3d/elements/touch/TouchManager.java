@@ -21,6 +21,11 @@ public class TouchManager {
 		TouchManager.mainTouchElement = new Touch();
 	}
 
+	/**
+	 * Adds handler to list.
+	 * @param handler
+	 */
+	
 	public static void addTouchListener(TouchListener handler) {
 		// ======== Registers Handler To Known Handlers ========
 		if (!TouchManager.touchListeners.contains(handler)) {
@@ -28,8 +33,21 @@ public class TouchManager {
 		}
 	}
 
+	/**
+	 * Removes handler from list.
+	 * @param handler
+	 */
+	
 	public static void removeTouchListener(TouchListener handler) {
 		// ======== Remove Handler If It's In The List ========
 		TouchManager.touchListeners.remove(handler);
 	}
+
+	public static boolean isTouchListener(TouchListener handler) {
+		if (TouchManager.touchListeners.contains(handler)) {
+			return true;
+		}
+		return false;
+	}
+
 }
