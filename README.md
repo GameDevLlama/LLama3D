@@ -8,8 +8,7 @@ The first Intention of the project was to write small engine to display 2D image
 Why not more? Now the aim is to setup a smart 3D-engine, preparing the easiest way of programming 2D or 3D-games on Android for everyone.
 
 ### Examples ###
-#### APK-Files ####
-<a href="http://dl.dropbox.com/u/13497625/Android/Llama3D.apk">You are always able to find one of the newest test-applications here</a>
+
 #### 3D Torusworld Examples ####
 <a href="http://dl.dropbox.com/u/13497625/Android/device-2011-11-02-144807.png"><img src="http://dl.dropbox.com/u/13497625/Android/device-2011-11-02-144807.png" width="64" height="96" title="First Torus tests with simple shading and texturing"></a>
 <a href="http://dl.dropbox.com/u/13497625/Android/device-2011-11-02-145021.png"><img src="http://dl.dropbox.com/u/13497625/Android/device-2011-11-02-145021.png" width="64" height="96" title="Different Torus attributes testing"></a>
