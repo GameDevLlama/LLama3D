@@ -3,6 +3,8 @@ package com.llama3d.object.graphics.image;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.opengl.GLES20;
+
 public class ImageVBOFactory {
 
 	// ===================================================================
@@ -36,6 +38,12 @@ public class ImageVBOFactory {
 	}
 
 	public static void clearVBOSpace() {
+		for (ImageVBO imageVBO : imageVBOs) {
+			// ======== Free VBOs ========
+			int[] vBuffer = new int[]{imageVBO.vBuffer};
+			GLES20.glGenBuffers(1, vBuffer, 0);
+			GLES20.glDeleteBuffers(1, vBuffer, 0);
+		}
 		ImageVBOFactory.imageVBOs.clear();
 	}
 }

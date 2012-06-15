@@ -67,4 +67,5 @@ public class ImageVBO {
 		}
 		return 0;
 	}
+
 }
